@@ -55,7 +55,7 @@ async def login(credentials: UserCredentials):
     user_input = credentials.username
 
     # Query the database
-    sql_query = "SELECT * FROM users WHERE full_name = :username"
+    sql_query = "SELECT * FROM users WHERE username = :username"
     sql_values = {"username":user_input}
     user_data = await database.fetch_one(query=sql_query, values=sql_values)
 
@@ -65,7 +65,7 @@ async def login(credentials: UserCredentials):
         }
     else:
        user_pass=credentials.password
-       sql_query = "INSERT INTO users (full_name,password) VALUES (:username, :password)"
+       sql_query = "INSERT INTO users (username,password) VALUES (:username, :password)"
        values = {"username": user_input, "password": user_pass}
        await database.execute(query=sql_query, values=values)
        return {
