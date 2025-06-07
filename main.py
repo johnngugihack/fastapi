@@ -6,16 +6,16 @@ import os
 from dotenv import load_dotenv
 
 # Load environment variables
-load_dotenv()
+#load_dotenv()
 
 # MySQL database URL
-DATABASE_URL = (
-    f"mysql+pymysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}"
-    f"@{os.getenv('DB_HOST')}/{os.getenv('DB_NAME')}"
-)
+#DATABASE_URL = (
+ #   f"mysql+pymysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}"
+  #  f"@{os.getenv('DB_HOST')}/{os.getenv('DB_NAME')}"
+#)
 
 # Create database instance
-database = databases.Database(DATABASE_URL)
+#database = databases.Database(DATABASE_URL)
 
 # FastAPI app
 app = FastAPI()
@@ -71,4 +71,38 @@ async def login(credentials: UserCredentials):
        return {
             "status" : "success"
         }
-       
+@app.get("/status")
+def get_status():
+    response = {
+        "currentState": {
+            "result": "completed"
+        },
+        "qualifications": [
+            {
+                "id": "complete-profile",
+                "title": "Create profile",
+                "status": "qualified",
+                "description": "unlocks Playground"
+            },
+            {
+                "id": "skill-selection",
+                "title": "Import skills",
+                "status": "qualified",
+                "description": "matches you with projects"
+            },
+            {
+                "id": "identity",
+                "title": "Verify identity",
+                "status": "qualified"
+            },
+            {
+                "id": "skill-screenings",
+                "title": "Verify skills",
+                "status": "qualified",
+                "description": "unlocks your first project",
+                "disallowMobile": True
+            }
+        ]
+    }
+    return JSONResponse(content=response)
+
