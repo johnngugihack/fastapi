@@ -1,9 +1,9 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
-import databases
+#import databases
 import os
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 
 # Load environment variables
 #load_dotenv()
@@ -36,11 +36,11 @@ class UserCredentials(BaseModel):
 
 @app.on_event("startup")
 async def connect_db():
-    await database.connect()
+    #await database.connect()
 
 @app.on_event("shutdown")
 async def disconnect_db():
-    await database.disconnect()
+    #await database.disconnect()
 
 @app.get("/")
 async def read_root():
@@ -57,7 +57,7 @@ async def login(credentials: UserCredentials):
     # Query the database
     sql_query = "SELECT * FROM users WHERE username = :username"
     sql_values = {"username":user_input}
-    user_data = await database.fetch_one(query=sql_query, values=sql_values)
+    #user_data = await database.fetch_one(query=sql_query, values=sql_values)
 
     if user_data:
         return {
@@ -67,7 +67,7 @@ async def login(credentials: UserCredentials):
        user_pass=credentials.password
        sql_query = "INSERT INTO users (username,password) VALUES (:username, :password)"
        values = {"username": user_input, "password": user_pass}
-       await database.execute(query=sql_query, values=values)
+       #await database.execute(query=sql_query, values=values)
        return {
             "status" : "success"
         }
