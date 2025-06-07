@@ -1,21 +1,21 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
-#import databases
+# import databases
 import os
-#from dotenv import load_dotenv
+# from dotenv import load_dotenv
 
 # Load environment variables
-#load_dotenv()
+# load_dotenv()
 
 # MySQL database URL
-#DATABASE_URL = (
- #   f"mysql+pymysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}"
-  #  f"@{os.getenv('DB_HOST')}/{os.getenv('DB_NAME')}"
-#)
+# DATABASE_URL = (
+#     f"mysql+pymysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}"
+#     f"@{os.getenv('DB_HOST')}/{os.getenv('DB_NAME')}"
+# )
 
 # Create database instance
-#database = databases.Database(DATABASE_URL)
+# database = databases.Database(DATABASE_URL)
 
 # FastAPI app
 app = FastAPI()
@@ -36,11 +36,13 @@ class UserCredentials(BaseModel):
 
 @app.on_event("startup")
 async def connect_db():
-    #await database.connect()
+    # await database.connect()
+    pass
 
 @app.on_event("shutdown")
 async def disconnect_db():
-    #await database.disconnect()
+    # await database.disconnect()
+    pass
 
 @app.get("/")
 async def read_root():
@@ -56,21 +58,22 @@ async def login(credentials: UserCredentials):
 
     # Query the database
     sql_query = "SELECT * FROM users WHERE username = :username"
-    sql_values = {"username":user_input}
-    #user_data = await database.fetch_one(query=sql_query, values=sql_values)
+    sql_values = {"username": user_input}
+    # user_data = await database.fetch_one(query=sql_query, values=sql_values)
 
-    if user_data:
+    if False:  # Replace with: if user_data:
         return {
             "message": f"Welcome, {user_input}!"
         }
     else:
-       user_pass=credentials.password
-       sql_query = "INSERT INTO users (username,password) VALUES (:username, :password)"
-       values = {"username": user_input, "password": user_pass}
-       #await database.execute(query=sql_query, values=values)
-       return {
-            "status" : "success"
+        user_pass = credentials.password
+        sql_query = "INSERT INTO users (username, password) VALUES (:username, :password)"
+        values = {"username": user_input, "password": user_pass}
+        # await database.execute(query=sql_query, values=values)
+        return {
+            "status": "success"
         }
+
 @app.get("/status")
 def get_status():
     response = {
@@ -104,5 +107,5 @@ def get_status():
             }
         ]
     }
+    from fastapi.responses import JSONResponse
     return JSONResponse(content=response)
-
